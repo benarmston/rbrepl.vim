@@ -40,6 +40,7 @@ let g:rbrepl_loaded = 1
 " REPL code in Ruby {{{
 ruby <<EOF
 require 'ripl'
+require 'ripl/multi_line'
 require 'stringio'
 
 module Ripl::Vim
@@ -73,7 +74,7 @@ module Ripl::Vim
   # Override Ripl::Shell#get_input to take input from the current line of the
   # current vim buffer.
   def get_input
-    $curbuf.line.gsub(/#{prompt} ?/, '').rstrip
+    $curbuf.line.sub(/^#{prompt} ?/, '').rstrip
   end
 
   # Override Ripl::Shell#print_result to insert the result directly below the
@@ -101,7 +102,7 @@ end
 Ripl::Shell.include Ripl::Vim
 
 
-$rbrepl = Ripl.shell(:readline => false, :prompt => 'ruby> ')
+$rbrepl = Ripl.shell(:readline => false, :prompt => 'ruby> ', :multi_line_prompt => '      ')
 EOF
 "
 " Public interface. {{{
